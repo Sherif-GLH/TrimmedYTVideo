@@ -39,8 +39,10 @@ def remove_local_file(file_path):
 def TrimVideo(url, start_time, end_time):
 
     # Download video and audio from YouTube using yt-dlp
-    
-    with yt_dlp.YoutubeDL() as ydl:
+    ydl_opts = {
+            'cookiefile': '/app/cookies.txt',
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=False)  # Extract info without downloading
         format = info_dict['formats'][-2]
         Video_format_id = format.get('format_id', 'N/A')
