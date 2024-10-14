@@ -84,6 +84,7 @@ def TrimVideo(url, start_time, end_time):
 
     try:
         ydl_opts = {
+            'cookiefile': '/app/cookies.txt',
             'format': Audio_format_id,
             'outtmpl': audio_path,
         }
