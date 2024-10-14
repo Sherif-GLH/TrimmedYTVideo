@@ -61,6 +61,8 @@ def TrimVideo(url, start_time, end_time):
 
     try:
         ydl_opts = {
+            'ap_username':'SherifAbouzeid',
+            'ap_password':'Sherif007?',
             'format': Video_format_id,
             'outtmpl': video_path,  
             'writesubtitles': True,
