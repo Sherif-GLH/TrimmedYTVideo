@@ -40,7 +40,8 @@ def TrimVideo(url, start_time, end_time):
 
     # Download video and audio from YouTube using yt-dlp
     ydl_opts = {
-            'cookiefile': '/app/cookies.txt',
+            'cookiefile': './cookies.txt',
+            'nocheckcertificate': True,
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=False)  # Extract info without downloading
@@ -63,12 +64,13 @@ def TrimVideo(url, start_time, end_time):
 
     try:
         ydl_opts = {
-            'cookiefile': '/app/cookies.txt',
+            'cookiefile': './cookies.txt',
             'format': Video_format_id,
             'outtmpl': video_path,  
             'writesubtitles': True,
             'writeautomaticsub': True,
             'subtitleslangs': ['en'],
+            'nocheckcertificate': True,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -86,9 +88,10 @@ def TrimVideo(url, start_time, end_time):
 
     try:
         ydl_opts = {
-            'cookiefile': '/app/cookies.txt',
+            'cookiefile': './cookies.txt',
             'format': Audio_format_id,
             'outtmpl': audio_path,
+            'nocheckcertificate': True,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
