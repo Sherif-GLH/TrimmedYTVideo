@@ -4,6 +4,6 @@ from . models import VideoTrimmed
 # Register your models here.
 
 class TrimmedAdmin(admin.ModelAdmin):
-    list_display = ('title','trimmed_video', 'trimmed_audio')
+    list_display = ('title','trimmed_video')
 admin.site.register(VideoTrimmed, TrimmedAdmin)
 
