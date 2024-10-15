@@ -9,6 +9,17 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 import os
 from selenium_stealth import stealth
+import shutil
+import glob
+import random
+import string
+
+### method to generate random string 10 charachters ###
+def randomName():
+    all_charachters = list(string.ascii_letters)
+    random_chars = random.sample(all_charachters, 10)
+    name = ''.join(random_chars)
+    return name
 
 ## method to close  pop upp ##
 def closePopUp(driver):
@@ -50,10 +61,8 @@ def downloadVideo(id):
     closePopUp(driver=driver)
     ## to get the title of video ##
     title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH,'.//div[@class="caption text-left"]'))).text
-    print(title)
     ## get the quality text ##
     quality = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME,'td')))[3].text.split(" ")
-    print('quality',quality)
     get_download_button = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH,'.//button[@class="btn btn-success"]')))
     closePopUp(driver=driver)
     ActionChains(driver).move_to_element(get_download_button[1]).click().perform()
@@ -61,8 +70,20 @@ def downloadVideo(id):
     closePopUp(driver=driver)
     ActionChains(driver).move_to_element(get_second_download_button).click().perform()
     time.sleep(50)
+    ## get random name ##
+    name = randomName()
+    # Rename the downloaded video
+    download_directory = os.path.abspath('Media/')  # Ensure you use the absolute path
+    original_file = max(glob.glob(f'{download_directory}/*'), key=os.path.getctime)  # Get the latest file
+    new_filename = os.path.join(download_directory, f"{name}_{quality[0]}.mp4")
+    
+    # Rename the file
+    try:
+        shutil.move(original_file, new_filename)
+    except Exception as e:
+        print(f"Error renaming file: {e}")
     driver.close()
-    return str(title) , quality[0]
+    return str(title) , f'{str(name)}_{quality[0]}'
 
     
 
