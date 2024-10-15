@@ -34,9 +34,9 @@ def remove_local_file(file_path):
 
 def TrimVideo(url, start_time, end_time):
 
-    video_title, quality = downloadVideo(url)
+    video_title, path = downloadVideo(url)
     title = generate_random_string(10)
-    video_path = f"Media/y2mate.com - {video_title}_{quality}.mp4"
+    video_path = f"Media/{path}.mp4"
     
     trimmed_video_path = f"Media/{title}.mp4"
     
