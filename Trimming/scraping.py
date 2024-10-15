@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 import time
-from selenium_stealth import stealth
+# from selenium_stealth import stealth
 
 ## method to close  pop upp ##
 def closePopUp(driver):
@@ -36,13 +36,13 @@ def downloadVideo(id):
     chromedriver_path = '/usr/bin/chromedriver'
     service = Service(executable_path=chromedriver_path)
     driver = webdriver.Chrome(service=service , options=options)
-    stealth(driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True)
+    # stealth(driver,
+    #     languages=["en-US", "en"],
+    #     vendor="Google Inc.",
+    #     platform="Win32",
+    #     webgl_vendor="Intel Inc.",
+    #     renderer="Intel Iris OpenGL Engine",
+    #     fix_hairline=True)
     ## open webdriver for y2mate ##
     driver.get(url=f'https://www.y2mate.com/youtube/{id}/') 
     WebDriverWait(driver, 20).until(lambda driver: driver.execute_script("return document.readyState") == "complete")
