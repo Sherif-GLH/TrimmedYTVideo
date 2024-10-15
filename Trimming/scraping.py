@@ -50,6 +50,10 @@ def downloadVideo(id):
     closePopUp(driver=driver)
     ## to get the title of video ##
     title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH,'.//div[@class="caption text-left"]'))).text
+    print(title)
+    ## get the quality text ##
+    quality = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME,'td')))[3].text.split(" ")
+    print('quality',quality)
     get_download_button = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH,'.//button[@class="btn btn-success"]')))
     closePopUp(driver=driver)
     ActionChains(driver).move_to_element(get_download_button[1]).click().perform()
@@ -58,7 +62,7 @@ def downloadVideo(id):
     ActionChains(driver).move_to_element(get_second_download_button).click().perform()
     time.sleep(50)
     driver.close()
-    return str(title) 
+    return str(title) , quality[0]
 
     
 
