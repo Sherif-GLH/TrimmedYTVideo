@@ -39,22 +39,25 @@ def downloadVideo(id):
     stealth(driver,
         languages=["en-US", "en"],
         vendor="Google Inc.",
-        platform="Win32",
+        platform="MacIntel",
         webgl_vendor="Intel Inc.",
         renderer="Intel Iris OpenGL Engine",
         fix_hairline=True)
     ## open webdriver for y2mate ##
     driver.get(url=f'https://www.y2mate.com/youtube/{id}/') 
-    WebDriverWait(driver, 20).until(lambda driver: driver.execute_script("return document.readyState") == "complete")
+    WebDriverWait(driver, 10).until(lambda driver: driver.execute_script("return document.readyState") == "complete")
     closePopUp(driver=driver)
-    get_download_button = WebDriverWait(driver, 20).until(EC.presence_of_all_elements_located((By.XPATH,'.//button[@class="btn btn-success"]')))
+    ## to get the title of video ##
+    title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH,'.//div[@class="caption text-left"]')))
+    get_download_button = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH,'.//button[@class="btn btn-success"]')))
     closePopUp(driver=driver)
     ActionChains(driver).move_to_element(get_download_button[2]).click().perform()
     get_second_download_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,'.//a[@class="btn btn-success btn-file"]')))
     closePopUp(driver=driver)
     ActionChains(driver).move_to_element(get_second_download_button).click().perform()
-    time.sleep(200)
+    time.sleep(50)
     driver.close()
+    return str(title)
 
     
 
