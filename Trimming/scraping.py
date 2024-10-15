@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 import time
+import os
 from selenium_stealth import stealth
 
 ## method to close  pop upp ##
@@ -30,7 +31,7 @@ def downloadVideo(id):
     options.add_argument("disable-infobars")
      # Set Chrome options for file download
     prefs = {
-        "download.default_directory": 'app/Media/',  # Use the path you defined earlier
+        "download.default_directory": 'Media/',  # Use the path you defined earlier
     }
     options.add_experimental_option("prefs", prefs)
     chromedriver_path = '/usr/bin/chromedriver'
@@ -48,7 +49,7 @@ def downloadVideo(id):
     WebDriverWait(driver, 10).until(lambda driver: driver.execute_script("return document.readyState") == "complete")
     closePopUp(driver=driver)
     ## to get the title of video ##
-    title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH,'.//div[@class="caption text-left"]')))
+    title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH,'.//div[@class="caption text-left"]'))).text
     get_download_button = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH,'.//button[@class="btn btn-success"]')))
     closePopUp(driver=driver)
     ActionChains(driver).move_to_element(get_download_button[1]).click().perform()

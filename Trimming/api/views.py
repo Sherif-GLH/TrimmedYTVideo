@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 class TrimView(APIView):
 
     def post(self, request, **kwargs):
-        url = request.data['url']
+        url = request.data['url_id']
         starttime = request.data['start_time']
         endtime = request.data['end_time']
         videoObject = TrimVideo(url, starttime, endtime)
