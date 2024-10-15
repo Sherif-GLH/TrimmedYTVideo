@@ -13,6 +13,14 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r /app/requirements.txt
 
+RUN apt-get -y install chromium-driver
+
+RUN apt-get -y install chromium 
+RUN apt-get purge --auto-remove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN which chromium
+RUN which chromedriver
+
 COPY . /app/
 
 EXPOSE 80
