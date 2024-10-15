@@ -34,9 +34,9 @@ def remove_local_file(file_path):
 
 def TrimVideo(url, start_time, end_time):
 
-    video_title = downloadVideo(url)
+    video_title, quality = downloadVideo(url)
     title = generate_random_string(10)
-    video_path = f"Media/{video_title}.mp4"
+    video_path = f"Media/y2mate.com - {video_title}_{quality}.mp4"
     
     trimmed_video_path = f"Media/{title}.mp4"
     
@@ -52,7 +52,7 @@ def TrimVideo(url, start_time, end_time):
 
     #trimmed video/audio to S3
     try:
-        upload_to_s3(trimmed_video_path, f"trimmed_videos/trimmed_{title}.mp4")
+        upload_to_s3(trimmed_video_path, f"trimmed_videos/{title}.mp4")
     except Exception as e:
         print(f"Error uploading files to S3: {str(e)}")
 
