@@ -13,6 +13,8 @@ import shutil
 import glob
 import random
 import string
+import requests
+import re
 
 ### method to generate random string 10 charachters ###
 def randomName():
@@ -20,6 +22,12 @@ def randomName():
     random_chars = random.sample(all_charachters, 10)
     name = ''.join(random_chars)
     return name
+
+## method to remove any special charachters from string ##
+def remove_special_characters(input_string):
+    # Use regular expression to remove any character that is not a letter or number
+    clean_string = re.sub(r'[^A-Za-z0-9 ]+', '', input_string)
+    return clean_string
 
 ## method to close  pop upp ##
 def closePopUp(driver):
@@ -68,12 +76,27 @@ def downloadVideo(id):
     ActionChains(driver).move_to_element(get_download_button[1]).click().perform()
     get_second_download_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,'.//a[@class="btn btn-success btn-file"]')))
     closePopUp(driver=driver)
-    ActionChains(driver).move_to_element(get_second_download_button).click().perform()
-    time.sleep(50)
+    # ActionChains(driver).move_to_element(get_second_download_button).click().perform()
+    link_of_download = get_second_download_button.get_attribute('href')
+    print("link:" , link_of_download)
+    driver.close()
+    ## remove special charachters from title ##
+    new_title = remove_special_characters(input_string=title)
+    ## request on download link ##
+    download_directory = os.path.abspath('Media/')  # Ensure you use the absolute path
+    print("Starting download...")
+    response = requests.get(url=link_of_download, stream=True)
+    if response.status_code == 200:
+        file_path = os.path.join(download_directory, f"{new_title}.mp4")
+        print(new_title)
+        print(file_path)
+        with open(file_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Downloaded video saved as {file_path}")
     ## get random name ##
     name = randomName()
-    # Rename the downloaded video
-    download_directory = os.path.abspath('Media/')  # Ensure you use the absolute path
+    # Rename the downloaded video #
     original_file = max(glob.glob(f'{download_directory}/*'), key=os.path.getctime)  # Get the latest file
     new_filename = os.path.join(download_directory, f"{name}_{quality[0]}.mp4")
     
@@ -82,7 +105,6 @@ def downloadVideo(id):
         shutil.move(original_file, new_filename)
     except Exception as e:
         print(f"Error renaming file: {e}")
-    driver.close()
     return str(title) , f'{str(name)}_{quality[0]}'
 
     
