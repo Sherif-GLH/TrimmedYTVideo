@@ -88,6 +88,8 @@ def downloadVideo(id):
     response = requests.get(url=link_of_download, stream=True)
     if response.status_code == 200:
         file_path = os.path.join(download_directory, f"{new_title}.mp4")
+        print(new_title)
+        print(file_path)
         with open(file_path, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
