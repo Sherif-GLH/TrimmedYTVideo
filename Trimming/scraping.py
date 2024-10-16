@@ -14,6 +14,7 @@ import glob
 import random
 import string
 import requests
+import re
 
 ### method to generate random string 10 charachters ###
 def randomName():
@@ -21,6 +22,12 @@ def randomName():
     random_chars = random.sample(all_charachters, 10)
     name = ''.join(random_chars)
     return name
+
+## method to remove any special charachters from string ##
+def remove_special_characters(input_string):
+    # Use regular expression to remove any character that is not a letter or number
+    clean_string = re.sub(r'[^A-Za-z0-9 ]+', '', input_string)
+    return clean_string
 
 ## method to close  pop upp ##
 def closePopUp(driver):
@@ -73,19 +80,21 @@ def downloadVideo(id):
     link_of_download = get_second_download_button.get_attribute('href')
     print("link:" , link_of_download)
     driver.close()
+    ## remove special charachters from title ##
+    new_title = remove_special_characters(input_string=title)
     ## request on download link ##
     download_directory = os.path.abspath('Media/')  # Ensure you use the absolute path
     print("Starting download...")
     response = requests.get(url=link_of_download, stream=True)
     if response.status_code == 200:
-        file_path = os.path.join(download_directory, f"{title}.mp4")
+        file_path = os.path.join(download_directory, f"{new_title}.mp4")
         with open(file_path, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
         print(f"Downloaded video saved as {file_path}")
     ## get random name ##
     name = randomName()
-    # Rename the downloaded video
+    # Rename the downloaded video #
     original_file = max(glob.glob(f'{download_directory}/*'), key=os.path.getctime)  # Get the latest file
     new_filename = os.path.join(download_directory, f"{name}_{quality[0]}.mp4")
     
