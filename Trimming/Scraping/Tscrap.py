@@ -1,14 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait 
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium_stealth import stealth
 from time import sleep
 
-def downloadVideo(link):
+def downloadTVideo(link):
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
@@ -40,4 +39,6 @@ def downloadVideo(link):
     WebDriverWait(driver, 10).until(lambda driver: driver.execute_script("return document.readyState") == "complete")
     btn = driver.find_element(By.XPATH, '//a[contains(@class, "quality-best")]')
     ActionChains(driver).move_to_element(btn).click().perform()
-    sleep(1000)
+    sleep(30)
+    driver.close()
+    return 

@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from ..trim import TrimVideo
 from .serializers import VideoTrimmedSerializer
-from Trimming.scraping import downloadVideo
+from Trimming.Scraping.YTscrap import downloadVideo
 from rest_framework.decorators import api_view
 class TrimView(APIView):
 

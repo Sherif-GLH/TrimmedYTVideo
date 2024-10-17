@@ -6,15 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
-import time
-import os
 from selenium_stealth import stealth
-import shutil
-import glob
-import random
-import string
-import requests
-import re
+import time, os, glob, random, shutil, string, requests, re
 
 ### method to generate random string 10 charachters ###
 def randomName():
