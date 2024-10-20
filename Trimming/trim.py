@@ -41,12 +41,13 @@ def TrimVideo(url, start_time, end_time):
     video_path = f"{path}"
     
     trimmed_video_path = f"Media/{title}.mp4"
-    
+    cover_picture_path = f"Media/frame_{title}.jpg"
+    middle_time = (start_time + end_time) / 2
     try:
         # Trim video using moviepy
         video_clip = VideoFileClip(video_path).subclip(start_time, end_time)
         video_clip.write_videofile(trimmed_video_path, codec="libx264")
-
+        video_clip.save_frame(cover_picture_path, t=middle_time)
         print("Trimming completed successfully")
     except Exception as e:
         print(f"Error trimming video: {str(e)}")
@@ -55,14 +56,18 @@ def TrimVideo(url, start_time, end_time):
     #trimmed video/audio to S3
     try:
         upload_to_s3(trimmed_video_path, f"trimmed_videos/{title}.mp4")
+        upload_to_s3(cover_picture_path, f"cover_picture/{title}.jpg")
     except Exception as e:
         print(f"Error uploading files to S3: {str(e)}")
 
     remove_local_file(video_path)
     remove_local_file(trimmed_video_path)
+    remove_local_file(cover_picture_path)
 
 
     video_trimmed = VideoTrimmed.objects.create(
     title=video_title, 
-    trimmed_video=f"/trimmed_videos/{title}.mp4")
+    trimmed_video=f"/trimmed_videos/{title}.mp4",
+    cover_picture=f"/cover_picture/frame_{title}.jpg"
+    )
     return video_trimmed
