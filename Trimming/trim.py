@@ -68,6 +68,6 @@ def TrimVideo(url, start_time, end_time):
     video_trimmed = VideoTrimmed.objects.create(
     title=video_title, 
     trimmed_video=f"/trimmed_videos/{title}.mp4",
-    cover_picture=f"/cover_picture/frame_{title}.jpg"
+    cover_picture=f"/cover_picture/{title}.jpg"
     )
     return video_trimmed
