@@ -2,7 +2,7 @@ from moviepy.editor import VideoFileClip
 import boto3, requests, os, string, random
 from .models import VideoTrimmed
 from moviepy.video.io.VideoFileClip import VideoFileClip
-from .YTDownload import downloadvideo
+from .Scraping.YTscrap import downloadVideo
 from .Scraping.Tscrap import downloadTVideo
 
 
@@ -32,18 +32,11 @@ def remove_local_file(file_path):
 
 def TrimVideo(url, start_time, end_time):
     if 'youtube' in url:
-<<<<<<< HEAD
         url = url.split('v=')[1]
         video_title, path = downloadVideo(url)
         requests.post
     if 'x.com' in url:
         path = downloadTVideo(url)
-=======
-        video_title, path = downloadvideo(url)
-
-    elif 'x.com' in url:
-        video_title, path = downloadTVideo(url)
->>>>>>> 91fafc1da8f3248d36e1cc024953e7ed46570d36
         
     title = generate_random_string(10)
     video_path = f"{path}"
