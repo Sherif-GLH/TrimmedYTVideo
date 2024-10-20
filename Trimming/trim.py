@@ -37,7 +37,7 @@ def TrimVideo(url, start_time, end_time):
         video_title, path = downloadVideo(url)
         requests.post
     if 'x.com' in url:
-        video_title, path = downloadTVideo(url)
+        path = downloadTVideo(url)
         
     title = generate_random_string(10)
     video_path = f"Media/{path}.mp4"

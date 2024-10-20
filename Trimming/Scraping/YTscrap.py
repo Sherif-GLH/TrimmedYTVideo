@@ -35,20 +35,25 @@ def closePopUp(driver):
 
 ## method for download ##
 def downloadVideo(id):
+    # Ensure you use the absolute path #
+    download_directory = os.path.abspath('Media/') 
+    ## options and services of chrome driver ## 
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-extensions")
     options.add_argument("disable-infobars")
-     # Set Chrome options for file download
+    # Set Chrome options for file download
     prefs = {
-        "download.default_directory": 'Media/',  # Use the path you defined earlier
+        "download.default_directory": download_directory ,  # Use the path you defined earlier
+        "safebrowsing.enabled": True , # Enable safe browsing for downloads
     }
     options.add_experimental_option("prefs", prefs)
     chromedriver_path = '/usr/bin/chromedriver'
     service = Service(executable_path=chromedriver_path)
     driver = webdriver.Chrome(service=service , options=options)
+    ## stealth for browsing as a human ##
     stealth(driver,
         languages=["en-US", "en"],
         vendor="Google Inc.",
@@ -68,29 +73,32 @@ def downloadVideo(id):
     closePopUp(driver=driver)
     ActionChains(driver).move_to_element(get_download_button[1]).click().perform()
     get_second_download_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,'.//a[@class="btn btn-success btn-file"]')))
+    print("text: ",get_second_download_button.text)
     closePopUp(driver=driver)
     # ActionChains(driver).move_to_element(get_second_download_button).click().perform()
     link_of_download = get_second_download_button.get_attribute('href')
     print("link:" , link_of_download)
-    driver.close()
+    requests.get(url=link_of_download)
+    # get_second_download_button.click()
     ## remove special charachters from title ##
-    new_title = remove_special_characters(input_string=title)
+    # new_title = remove_special_characters(input_string=title)
     ## request on download link ##
-    download_directory = os.path.abspath('Media/')  # Ensure you use the absolute path
     print("Starting download...")
-    response = requests.get(url=link_of_download, stream=True)
-    if response.status_code == 200:
-        file_path = os.path.join(download_directory, f"{new_title}.mp4")
-        print(new_title)
-        print(file_path)
-        with open(file_path, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        print(f"Downloaded video saved as {file_path}")
+    time.sleep(80)
+    # response = requests.get(url=link_of_download, stream=True)
+    # if response.status_code == 200:
+    #     file_path = os.path.join(download_directory, f"{new_title}.mp4")
+    #     print(new_title)
+    #     print(file_path)
+    #     with open(file_path, 'wb') as f:
+    #         for chunk in response.iter_content(chunk_size=8192):
+    #             f.write(chunk)
+    #     print(f"Downloaded video saved as {file_path}")
+    driver.close()
     ## get random name ##
     name = randomName()
     # Rename the downloaded video #
-    original_file = max(glob.glob(f'{download_directory}/*'), key=os.path.getctime)  # Get the latest file
+    original_file = max(glob.glob(f'{download_directory}/*'), key=os.path.getatime)  # Get the latest file
     new_filename = os.path.join(download_directory, f"{name}_{quality[0]}.mp4")
     
     # Rename the file

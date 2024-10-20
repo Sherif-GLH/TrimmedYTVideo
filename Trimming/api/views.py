@@ -4,6 +4,8 @@ from ..trim import TrimVideo
 from .serializers import VideoTrimmedSerializer
 from Trimming.Scraping.YTscrap import downloadVideo
 from rest_framework.decorators import api_view
+from Trimming.Scraping.Tscrap import downloadTVideo
+
 class TrimView(APIView):
 
     def post(self, request, **kwargs):
@@ -16,5 +18,11 @@ class TrimView(APIView):
     
 @api_view(['GET'])
 def download(request,id):
-    downloadVideo(id=id)
-    return Response({"message":"Done!"})
+    title , name =downloadVideo(id=id)
+    return Response({"name":name})
+
+@api_view(['POST'])
+def test_twitter(request):
+    url = request.data['url_id']
+    path = downloadTVideo(link=url)
+    return Response({"path":path})
